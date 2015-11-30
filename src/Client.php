@@ -102,7 +102,7 @@ class Client
      * @param String[] $data
      * @param int      $maxLength
      * @param string   $glue
-     * @return array <array<int,string>>
+     * @return array<array<int,string>>
      */
     protected function fillPackets(array $data, $maxLength, $glue = "\n")
     {
