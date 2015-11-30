@@ -1,0 +1,106 @@
+<?php
+
+namespace Vend\Statsd;
+
+class Client
+{
+    /**
+     * An ordered list of metrics yet to be sent
+     *
+     * @var MetricInterface[]
+     */
+    protected $queue = [];
+
+    /**
+     * Client constructor
+     *
+     * @param Socket           $socket
+     * @param FactoryInterface $factory
+     */
+    public function __construct(Socket $socket, FactoryInterface $factory)
+    {
+        $this->socket = $socket;
+        $this->factory = $factory;
+    }
+
+    /**
+     * Forward methods to the factory
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return Metric
+     */
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this->factory, $name)) {
+            $metric = call_user_func_array([$this->factory, $name], $arguments);
+            $this->add($metric);
+            return $metric;
+        }
+
+        throw new \BadMethodCallException('No such StatsD factory method: ' . $name);
+    }
+
+    /**
+     * Enqueues a metric to be sent on the next flush
+     *
+     * @param MetricInterface $metric
+     */
+    public function add(MetricInterface $metric)
+    {
+        $this->queue[] = $metric;
+    }
+
+    /**
+     * Flushes the queued metrics
+     */
+    public function flush()
+    {
+        $this->socket->open();
+
+        $metrics = array_map(function (MetricInterface $metric) {
+            return $metric->getData();
+        }, $this->queue);
+
+        $packets = $this->fillPackets($metrics, Socket::MAX_DATAGRAM_SIZE);
+
+        foreach ($packets as $packet) {
+            $this->socket->write($packet);
+        }
+
+        $this->queue = [];
+        $this->socket->close();
+    }
+
+    /**
+     * Splits an array of pieces of data into combined pieces no larger than the given max
+     *
+     * @param String[] $data
+     * @param int      $maxLength
+     * @param string   $glue
+     * @return array <array<int,string>>
+     */
+    protected function fillPackets(array $data, $maxLength, $glue = "\n")
+    {
+        // The result array of strings, each shorter than $maxLength (unless a piece is larger on its own)
+        $result = [''];
+
+        // The index, in the result array, of the piece we're currently appending to
+        $index = 0;
+
+        // The size of the current piece
+        $size = 0;
+
+        foreach ($data as $metric) {
+            $len = strlen($metric) + 1; // +1 for glue
+
+            if (($size + $len) > $maxLength) {
+                $result[++$index] = $data; // Fill the next part of the result
+                $size = $len;
+            } else {
+                $size += $len;
+                $result[$index] .= $glue . $data;
+            }
+        }
+    }
+}
