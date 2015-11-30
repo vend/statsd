@@ -11,7 +11,6 @@ class ReadmeTest extends BaseTest
         $metric = new Metric('foo', 1, Type::COUNTER);
 
         $socket = $this->getMockBuilder(Socket::class)
-            ->setMethods(['write', 'open', 'close'])
             ->getMock();
 
         $factory = $this->getMockBuilder(Factory::class)
@@ -49,5 +48,7 @@ class ReadmeTest extends BaseTest
         $client->gauge('some.key', 10);
         $client->timer('some.key', 0.25);
         $client->set('some.key', 'something');
+
+        $client->flush();
     }
 }

@@ -109,12 +109,14 @@ class Client
             $len = strlen($metric) + 1; // +1 for glue
 
             if (($size + $len) > $maxLength) {
-                $result[++$index] = $data; // Fill the next part of the result
+                $result[++$index] = $metric; // Fill the next part of the result
                 $size = $len;
             } else {
                 $size += $len;
-                $result[$index] .= $glue . $data;
+                $result[$index] .= $glue . $metric;
             }
         }
+
+        return $result;
     }
 }
