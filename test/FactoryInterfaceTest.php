@@ -40,6 +40,16 @@ abstract class FactoryInterfaceTest extends BaseTest
         $this->assertStringEndsWith('g', $data);
     }
 
+    public function testIncrement()
+    {
+        $metric = $this->factory->increment('key');
+        $data = $metric->getData();
+
+        $this->assertInstanceOf(MetricInterface::class, $metric);
+        $this->assertStringStartsWith('key', $data);
+        $this->assertStringEndsWith('c', $data);
+    }
+
     public function testDecrement()
     {
         $metric = $this->factory->decrement('key');
@@ -48,5 +58,15 @@ abstract class FactoryInterfaceTest extends BaseTest
         $this->assertInstanceOf(MetricInterface::class, $metric);
         $this->assertStringStartsWith('key', $data);
         $this->assertStringEndsWith('c', $data);
+    }
+
+    public function testSet()
+    {
+        $metric = $this->factory->set('key', 'some_value');
+        $data = $metric->getData();
+
+        $this->assertInstanceOf(MetricInterface::class, $metric);
+        $this->assertStringStartsWith('key', $data);
+        $this->assertStringEndsWith('s', $data);
     }
 }

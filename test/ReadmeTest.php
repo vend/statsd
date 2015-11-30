@@ -8,10 +8,27 @@ class ReadmeTest extends BaseTest
 {
     public function testClientFactory()
     {
-        $metric = new Metric('foo', 1, Type::COUNTER);
+        $socket = $this->getMockSocket();
+        $factory = $this->getMockFactory();
 
-        $socket = $this->getMockBuilder(Socket::class)
-            ->getMock();
+        $client = new Client($socket, $factory);
+
+        $client->counter('some.key', 1);
+        $client->increment('some.key');
+        $client->decrement('some.key');
+        $client->gauge('some.key', 10);
+        $client->timer('some.key', 0.25);
+        $client->set('some.key', 'something');
+
+        $client->flush();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|FactoryInterface
+     */
+    protected function getMockFactory()
+    {
+        $metric = new Metric('foo', 1, Type::COUNTER);
 
         $factory = $this->getMockBuilder(Factory::class)
             ->getMock();
@@ -40,15 +57,17 @@ class ReadmeTest extends BaseTest
             ->method('set')
             ->will($this->returnValue($metric));
 
-        $client = new Client($socket, $factory);
+        return $factory;
+    }
 
-        $client->counter('some.key', 1);
-        $client->increment('some.key');
-        $client->decrement('some.key');
-        $client->gauge('some.key', 10);
-        $client->timer('some.key', 0.25);
-        $client->set('some.key', 'something');
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|Socket
+     */
+    protected function getMockSocket()
+    {
+        $socket = $this->getMockBuilder(Socket::class)
+            ->getMock();
 
-        $client->flush();
+        return $socket;
     }
 }
