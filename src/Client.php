@@ -26,6 +26,16 @@ class Client
     protected $queue = [];
 
     /**
+     * @var Socket
+     */
+    protected $socket;
+
+    /**
+     * @var FactoryInterface
+     */
+    protected $factory;
+
+    /**
      * Client constructor
      *
      * @param Socket           $socket
