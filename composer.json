@@ -1,0 +1,38 @@
+{
+  "name": "vend/statsd",
+  "description": "StatsD client library",
+  "keywords": [
+    "statsd",
+    "monitoring"
+  ],
+  "homepage": "https://github.com/vend/statsd/",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5.0"
+  },
+  "authors": [
+    {
+      "name": "Dominic Scheirlinck",
+      "email": "dominic@vendhq.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Vend\\Statsd\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Vend\\Statsd\\": "test/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
