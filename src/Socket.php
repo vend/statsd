@@ -44,7 +44,7 @@ class Socket
 
     /**
      * @param string $data
-     * @return int|null
+     * @return int|null Number of bytes written
      */
     public function write($data)
     {
@@ -64,13 +64,10 @@ class Socket
      */
     public function close()
     {
-        if ($this->socket) {
+        if ($this->socket && is_resource($this->socket)) {
             socket_close($this->socket);
         }
-    }
 
-    public function __destruct()
-    {
-        $this->close();
+        $this->socket = null;
     }
 }

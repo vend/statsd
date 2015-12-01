@@ -116,6 +116,7 @@ class ClientTest extends BaseTest
     protected function getMockSocket()
     {
         $socket = $this->getMockBuilder(Socket::class)
+            ->setMethods(null)
             ->getMock();
 
         return $socket;
