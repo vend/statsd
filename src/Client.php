@@ -9,12 +9,12 @@ namespace Vend\Statsd;
  * Holds and sends a queue of metric instances to a socket. Uses the provided socket and factory to do so. Exposes
  * methods on the factory via __call, which is a little dynamic for some tastes, but also damn convenient.
  *
- * @method MetricInterface counter(string $key, int $delta)
- * @method MetricInterface increment(string $key)
- * @method MetricInterface decrement(string $key)
- * @method MetricInterface gauge(string $key, int|float $value)
- * @method MetricInterface timer(string $key, float $value)
- * @method MetricInterface set(string $key, mixed $value)
+ * @method MetricInterface counter(string $key, int $delta, ...)
+ * @method MetricInterface increment(string $key, ...)
+ * @method MetricInterface decrement(string $key, ...)
+ * @method MetricInterface gauge(string $key, int|float $value, ...)
+ * @method MetricInterface timer(string $key, float $value, ...)
+ * @method MetricInterface set(string $key, mixed $value, ...)
  */
 class Client
 {
