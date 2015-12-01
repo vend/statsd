@@ -86,7 +86,7 @@ class Client
             return $metric->getData();
         }, $this->queue);
 
-        $packets = $this->fillPackets($metrics, Socket::MAX_DATAGRAM_SIZE);
+        $packets = $this->fillPackets($metrics);
 
         foreach ($packets as $packet) {
             $this->socket->write($packet);
@@ -99,8 +99,13 @@ class Client
     /**
      * Splits an array of pieces of data into combined pieces no larger than the given max
      *
+     * A few subtleties:
+     *   - We attempt to fill each packet as much as possible, up to our preferred maximum size
+     *   - If a single string in the input is larger than the maximum size, we still attempt to send it (in a packet on its own)
+     *     This will probably be handled just fine right up to a good few KB (maybe even up near 60kB)
+     *
      * @param String[] $data
-     * @return array<array<int,string>>
+     * @return String[]
      */
     protected function fillPackets(array $data)
     {
