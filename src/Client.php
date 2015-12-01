@@ -100,12 +100,13 @@ class Client
      * Splits an array of pieces of data into combined pieces no larger than the given max
      *
      * @param String[] $data
-     * @param int      $maxLength
-     * @param string   $glue
      * @return array<array<int,string>>
      */
-    protected function fillPackets(array $data, $maxLength, $glue = "\n")
+    protected function fillPackets(array $data)
     {
+        $maxLength = Socket::MAX_DATAGRAM_SIZE;
+        $glue = "\n";
+
         // The result array of strings, each shorter than $maxLength (unless a piece is larger on its own)
         $result = [''];
 
@@ -116,14 +117,14 @@ class Client
         $size = 0;
 
         foreach ($data as $metric) {
-            $len = strlen($metric) + 1; // +1 for glue
+            $len = strlen($glue . $metric);
 
             if (($size + $len) > $maxLength) {
                 $result[++$index] = $metric; // Fill the next part of the result
                 $size = $len;
             } else {
+                $result[$index] .= ($size != 0 ? $glue : '') . $metric;
                 $size += $len;
-                $result[$index] .= $glue . $metric;
             }
         }
 
