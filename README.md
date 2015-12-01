@@ -1,7 +1,11 @@
 # vend/statsd
-## Statsd Client for PHP
+## Simple extensible StatsD client for PHP 5.5+
 
 [![Build Status](https://secure.travis-ci.org/vend/statsd.png)](http://travis-ci.org/vend/statsd)
+[![Code Coverage](https://scrutinizer-ci.com/g/vend/statsd/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/vend/statsd/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vend/statsd/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/vend/statsd/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/vend/statsd/version)](https://packagist.org/packages/vend/statsd)
+[![Latest Unstable Version](https://poser.pugx.org/vend/statsd/v/unstable)](//packagist.org/packages/vend/statsd)
 
 ### Features
 
@@ -39,7 +43,7 @@ $client->set('some.set', 'some_value');
 $client->flush(); // actually sends the metrics
 ```
 
-These methods return the `MetricInterface` produced by the factory (so you can then attach extra information). 
+These methods return the `MetricInterface` produced by the factory (so you can then attach extra information).
 
 You can also use the factory and socket to directly and immediately send metrics. The `->getData()` method on `MetricInterface`
 provides the serialized string that should be sent to the statsd server.

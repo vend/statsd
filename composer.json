@@ -1,6 +1,6 @@
 {
   "name": "vend/statsd",
-  "description": "StatsD client library",
+  "description": "Simple extensible StatsD client library for PHP 5.5+",
   "keywords": [
     "statsd",
     "monitoring"
