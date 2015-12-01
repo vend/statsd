@@ -52,10 +52,6 @@ class Socket
             $this->open();
         }
 
-        if (!$this->socket) {
-            return null;
-        }
-
         return socket_sendto($this->socket, $data, strlen($data), 0, $this->host, $this->port);
     }
 
