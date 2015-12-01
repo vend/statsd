@@ -41,7 +41,7 @@ class Metric implements MetricInterface
         $result = sprintf('%s:%s|%s', $this->key, $this->value, $this->type);
 
         if ($this->sampleRate < 1.0) {
-            $result .= "|@" . $this->sampleRate;
+            $result .= '|@' . $this->sampleRate;
         }
 
         return $result;
