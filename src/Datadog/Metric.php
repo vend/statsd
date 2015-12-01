@@ -30,8 +30,8 @@ class Metric extends BaseMetric
         if (!empty($this->tags)) {
             $tags = [];
 
-            array_walk($this->tags, function ($v, $k) {
-                $tags[] = is_integer($k) ? $v : $k . ':' . $v;
+            array_walk($this->tags, function ($tagValue, $tagName) use (&$tags) {
+                $tags[] = is_integer($tagName) ? $tagValue : $tagName . ':' . $tagValue;
             });
 
             $result .= '|#' . implode(',', $tags);
