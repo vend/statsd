@@ -20,6 +20,7 @@ abstract class MetricInterfaceTest extends BaseTest
         $this->assertEquals($metric->getData(), 'key:value|c');
 
         $metric = $this->getSut('key', -1, 'c');
-        $this->assertEquals($metric->getData(), 'key:-1|c');
+        $metric->setSampleRate(0.1);
+        $this->assertEquals($metric->getData(), 'key:-1|c|@0.1');
     }
 }
