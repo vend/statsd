@@ -12,7 +12,7 @@ namespace Vend\Statsd;
  * @method MetricInterface counter(string $key, int $delta, ...)
  * @method MetricInterface increment(string $key, ...)
  * @method MetricInterface decrement(string $key, ...)
- * @method MetricInterface gauge(string $key, int|float $value, ...)
+ * @method MetricInterface gauge(string $key, float $value, ...)
  * @method MetricInterface timer(string $key, float $value, ...)
  * @method MetricInterface set(string $key, mixed $value, ...)
  */
