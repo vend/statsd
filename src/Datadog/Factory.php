@@ -59,4 +59,9 @@ class Factory extends BaseFactory
     {
         return $this->createMetric($key, $value, Type::SET, $tags);
     }
+
+    protected function getNumericMetricTypes()
+    {
+        return array_merge(parent::getNumericMetricTypes(), [Type::HISTOGRAM]);
+    }
 }

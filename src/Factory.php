@@ -78,7 +78,7 @@ class Factory implements FactoryInterface
      */
     protected function validate($key, $value, $type)
     {
-        if (in_array($type, [Type::COUNTER, Type::GAUGE, Type::TIMER], true) && !is_numeric($value) && !preg_match('/^(-|\+)?\d+/', $value)) {
+        if (in_array($type, $this->getNumericMetricTypes(), true) && !is_numeric($value) && !preg_match('/^(-|\+)?\d+/', $value)) {
             $this->logger->error('Could not emit metric: requires an numeric value', [
                 'key'   => $key,
                 'value' => $value,
@@ -89,5 +89,10 @@ class Factory implements FactoryInterface
         }
 
         return true;
+    }
+
+    protected function getNumericMetricTypes()
+    {
+        return [Type::COUNTER, Type::GAUGE, Type::TIMER];
     }
 }
