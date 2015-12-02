@@ -23,6 +23,10 @@ class Factory extends BaseFactory
      */
     protected function createMetric($key, $value, $type, array $tags = [])
     {
+        if (!$this->validate($key, $value, $type)) {
+            return null;
+        }
+
         return new Metric($key, $value, $type, $tags);
     }
 

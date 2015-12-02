@@ -3,6 +3,7 @@
 namespace Vend\Statsd;
 
 use PHPUnit_Framework_TestCase as BaseTest;
+use Psr\Log\NullLogger;
 
 abstract class FactoryInterfaceTest extends BaseTest
 {
@@ -16,6 +17,11 @@ abstract class FactoryInterfaceTest extends BaseTest
     public function setUp()
     {
         $this->factory = $this->getFactory();
+    }
+
+    public function tearDown()
+    {
+        $this->factory = null;
     }
 
     public function testTimer()
@@ -68,5 +74,40 @@ abstract class FactoryInterfaceTest extends BaseTest
         $this->assertInstanceOf(MetricInterface::class, $metric);
         $this->assertStringStartsWith('key', $data);
         $this->assertStringEndsWith('s', $data);
+    }
+
+    public function testGaugeDelta()
+    {
+        $metric = $this->factory->set('key', '-200');
+        $data = $metric->getData();
+
+        $this->assertInstanceOf(MetricInterface::class, $metric);
+        $this->assertStringStartsWith('key', $data);
+        $this->assertStringEndsWith('s', $data);
+    }
+
+    public function testInvalidTimer()
+    {
+        $metric = $this->factory->timer('key', 'some_invalid_value');
+        $this->assertNull($metric);
+    }
+
+    public function testInvalidGauge()
+    {
+        $metric = $this->factory->gauge('key', 'some_invalid_value');
+        $this->assertNull($metric);
+    }
+
+    public function testLoggerAware()
+    {
+        $logger = $this->getMockBuilder(NullLogger::class)
+            ->getMock();
+
+        $logger->expects($this->once())
+            ->method('error');
+
+        $this->factory->setLogger($logger);
+
+        $this->factory->counter('key', 'some_invalid_value');
     }
 }

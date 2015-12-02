@@ -9,7 +9,8 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=5.5.0"
+    "php": ">=5.5.0",
+    "psr/log": "~1.0"
   },
   "authors": [
     {

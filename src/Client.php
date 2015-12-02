@@ -2,7 +2,6 @@
 
 namespace Vend\Statsd;
 
-
 /**
  * StatsD Client
  *
@@ -58,7 +57,11 @@ class Client
     {
         if (method_exists($this->factory, $name)) {
             $metric = call_user_func_array([$this->factory, $name], $arguments);
-            $this->add($metric);
+
+            if ($metric) {
+                $this->add($metric);
+            }
+
             return $metric;
         }
 
