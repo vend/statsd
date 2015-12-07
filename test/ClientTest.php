@@ -2,29 +2,14 @@
 
 namespace Vend\Statsd;
 
-use \PHPUnit_Framework_TestCase as BaseTest;
-
-class ClientTest extends BaseTest
+class ClientTest extends ClientInterfaceTest
 {
-    protected $socket;
-    protected $factory;
-    protected $client;
-
-    public function setUp()
+    protected function getSut(Socket $socket, FactoryInterface $factory)
     {
-        $this->socket = $this->getMockSocket();
-        $this->factory = $this->getMockFactory();
-        $this->client = new Client($this->socket, $this->factory);
+        return new Client($this->socket, $this->factory);
     }
 
-    public function tearDown()
-    {
-        $this->socket = null;
-        $this->factory = null;
-        $this->client = null;
-    }
-
-    public function testClientFactory()
+    public function testClientActuallyCallsFactory()
     {
         $metric = new Metric('foo', 1, Type::COUNTER);
 
@@ -97,28 +82,5 @@ class ClientTest extends BaseTest
         return $method->invokeArgs($this->client, [
             $data
         ]);
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|FactoryInterface
-     */
-    protected function getMockFactory()
-    {
-        $factory = $this->getMockBuilder(Factory::class)
-            ->getMock();
-
-        return $factory;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Socket
-     */
-    protected function getMockSocket()
-    {
-        $socket = $this->getMockBuilder(Socket::class)
-            ->setMethods(null)
-            ->getMock();
-
-        return $socket;
     }
 }

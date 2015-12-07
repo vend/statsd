@@ -15,7 +15,7 @@ namespace Vend\Statsd;
  * @method MetricInterface timer(string $key, float $value, ...)
  * @method MetricInterface set(string $key, mixed $value, ...)
  */
-class Client
+class Client implements ClientInterface
 {
     /**
      * An ordered list of metrics yet to be sent
@@ -46,13 +46,6 @@ class Client
         $this->factory = $factory;
     }
 
-    /**
-     * Forward methods to the factory
-     *
-     * @param string $name
-     * @param array $arguments
-     * @return Metric
-     */
     public function __call($name, $arguments)
     {
         if (method_exists($this->factory, $name)) {
@@ -68,19 +61,13 @@ class Client
         throw new \BadMethodCallException('No such StatsD factory method: ' . $name);
     }
 
-    /**
-     * Enqueues a metric to be sent on the next flush
-     *
-     * @param MetricInterface $metric
-     */
+
     public function add(MetricInterface $metric)
     {
         $this->queue[] = $metric;
     }
 
-    /**
-     * Flushes the queued metrics
-     */
+
     public function flush()
     {
         $this->socket->open();
