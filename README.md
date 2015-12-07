@@ -62,3 +62,8 @@ $socket->close();
 
 For an example of how to extend the library, see the `Vend\Statsd\Datadog` namespace. A different `Factory` is used
  by passing it to the Client. The Datadog-specific factory will allow the metrics to carry tag information.
+
+#### `NullClient`, `ClientAwareInterface` and `ClientAwareTrait`
+
+Helpful utility classes for performing optional (setter) injection of statsd clients into your classes. Use them in
+pretty much the same way as their PSR3 equivalents.
