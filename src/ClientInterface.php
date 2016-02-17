@@ -2,6 +2,10 @@
 
 namespace Vend\Statsd;
 
+/**
+ * @mixin Factory
+ * @mixin Datadog\Factory
+ */
 interface ClientInterface
 {
     /**
